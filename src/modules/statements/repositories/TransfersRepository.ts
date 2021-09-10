@@ -23,6 +23,14 @@ class TransfersRepository implements ITranfersRepository {
 
     return transfer;
   }
+
+  async getTransferBalance(sender_id: string): Promise<{ balance: number, transfer: Transfer[] }> {
+    const transfer = await this.repository.find({ sender_id });
+    const balance = transfer.reduce((acc, operation) => {
+      return acc + Number(operation.amount);
+    }, 0);
+    return { balance, transfer };
+  }
 }
 
 export { TransfersRepository };
